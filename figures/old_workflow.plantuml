@@ -1,0 +1,44 @@
+@startuml old_workflow
+!define LIGHTBLUE
+!includeurl https://gist.githubusercontent.com/amgs/de57560012a8a5f0e4240f392b678a40/raw/c903c6b4f16b60b5eef3248f093497faae378f51/style.puml
+
+
+class "my_math.h" as header << (H,grey) >> {
+    float square_root(float n);
+    int gcd(int a, int b);
+}
+
+class "my_math.c" as source << (S,2a86e2) >> {
+    float square_root(float n);
+    int gcd(int a, int b);
+}
+
+class "program.c" as main << (S,2a86e2) >> {
+    int main(int argc, char *argv[]);
+}
+note left of main::main
+    Utiliza ""square_root"" e ""gcd"".
+end note
+
+header --> main : ""incluir em""
+header --> source : ""incluir em""
+
+class "my_math.o" as object << (O,228811) >> {
+    float square_root(float n);
+    int gcd(int a, int b);
+}
+
+source --> object : ""compilar""
+
+class "program" as program << (E,BB6600) >> {
+    int main(int argc, char *argv[]);
+}
+
+note left of program::main
+    Utiliza ""square_root"" e ""gcd"".
+end note
+
+main --> program : ""compilar""
+object --> program : ""ligar""
+
+@enduml

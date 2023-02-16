@@ -1,0 +1,75 @@
+@startuml new_workflow
+!define LIGHTBLUE
+!includeurl https://gist.githubusercontent.com/amgs/de57560012a8a5f0e4240f392b678a40/raw/c903c6b4f16b60b5eef3248f093497faae378f51/style.puml
+
+class "my_math.h" as header << (H,grey) >> {
+    float square_root(float n);
+    int gcd(int a, int b);
+}
+
+class "my_math.c" as source << (S,2a86e2) >> {
+    float square_root(float n);
+    int gcd(int a, int b);
+}
+
+header --> source : ""incluir em""
+
+class "unity.h" as unity_header << (H,grey) >> {
+    TEST_BEGIN();
+    TEST_END();
+    TEST_ASSERT_EQUAL_FLOAT(expected, actual);
+    ... ();
+    void setUp(void);
+    void tearDown(void);
+}
+
+class "unity.c" as unity_source << (S,2a86e2) >> {
+    void setUp(void);
+    void tearDown(void);
+}
+
+unity_header --> unity_source : ""incluir em""
+
+class "unity.o" as unity_object << (O,228811) >> {
+    TEST_BEGIN();
+    TEST_END();
+    TEST_ASSERT_EQUAL_FLOAT(expected, actual);
+    ... ();
+    void setUp(void);
+    void tearDown(void);
+}
+
+unity_source --> unity_object : ""compilar""
+
+class "my_math.o" as object << (O,228811) >> {
+    float square_root(float n);
+    int gcd(int a, int b);
+}
+
+source --> object : ""compilar""
+
+class "my_math_test.c" as my_math_test << (S,2a86e2) >> {
+    void setUp();
+    void tearDown();
+    void test_square_root();
+    void test_gcd();
+    int main();
+}
+
+unity_header --> my_math_test : ""incluir em""
+header --> my_math_test : ""incluir em""
+
+class "my_math_test" as my_math_test_exec << (E,BB6600) >> {
+    void setUp();
+    void tearDown();
+    void test_square_root();
+    void test_gcd();
+    int main();
+}
+
+my_math_test --> my_math_test_exec : ""compilar""
+unity_object --> my_math_test_exec : ""ligar""
+object --> my_math_test_exec : ""ligar""
+
+
+@enduml
